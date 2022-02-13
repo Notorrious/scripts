@@ -1,7 +1,7 @@
-local URL = "https://solarishub.dev/games"
+local URL = "https://raw.githubusercontent.com/Notorrious/scripts/main"
 
 local games = {
-    [8592863835] = "Magnet_Simulator _2",
+    [8592863835] = "Magnet_Simulator_2",
 }
 
 for i,v in next, games do
