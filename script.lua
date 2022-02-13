@@ -1,7 +1,13 @@
-if game.GameId == 8592863835 then
-	a = "https://raw.githubusercontent.com/Notorrious/Magnet_Simulator_2/main/Magnet_Simulator_2" -- Magnet Simulator 2
-elseif
-    print("Game not supported yet!")
+local URL = "https://solarishub.dev/games"
+
+local games = {
+    [8592863835] = "Magnet_Simulator _2",
+}
+
+for i,v in next, games do
+    games[i] = table.concat(v:split(' '), '_')
 end
 
-loadstring(game:HttpGet(a))()
+local name = games[game.PlaceId] or games[game.GameId]
+
+return loadstring(game:HttpGet(URL .. "/" .. (name) .. ".lua", true))()
