@@ -1,0 +1,1335 @@
+--[[
+https://www.roblox.com/games/8357510970/
+loadstring(game:HttpGet("https://scriptblox.com/raw/AnimePunchingCopy_586"))()
+--]]
+
+if game.PlaceId == 8357510970 then
+
+    repeat wait() until game:IsLoaded()
+
+    _G.Settings = {
+        autoTap = false;
+        autoRebirth = false;
+        autoPractice = false;
+        autoEgg = false;
+        autoUpgrade = false;
+        autoRank = false;
+        autoAura = false;
+        autoWorld = false;
+        tripleEgg = "1";
+        autoMaxElite = false;
+    }
+
+    local codes = {
+        "14MVISITS";
+        "Dreamzinho";
+        "40KLIKES";
+        "HERO";
+        "35KLIKES";
+        "50KFAVS";
+        "10MVISITS";
+        "30KLIKES";
+        "8MVISITS";
+        "BOLINHOBLOX";
+        "25KLIKES";
+        "VAGNERGAMES";
+        "15klikes";
+        "4MVisits";
+        "2MVISITS";
+        "10KLIKES";
+        "5KLIKES";
+        "1MVISITS";
+        "MASTER";
+        "500KVISITS";
+        "250kvisits";
+        "80KVISITS";
+        "1KLIKES";
+        "Release";
+    }
+
+    pcall(function()
+        game:GetService("Players").LocalPlayer.PlayerGui.Ui.CenterFrame.Error:Destroy()
+        game:GetService("Players").LocalPlayer.PlayerGui.EggAnimation:Destroy()
+    end)
+
+    local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
+    local tickk = tick()
+    local reb = {"-- Rebirth Amount --"}
+    local practiceArea = {"-- Practice Area --"}
+    local egg = {"-- Select Egg --"}
+
+    for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Ui.CenterFrame.Rebirths.Frame:GetChildren()) do
+        if v:IsA("ImageLabel") and not table.find(reb,v.Price.Text) then
+            table.insert(reb,v.Price.Text)
+        end
+    end
+
+    for i, v in pairs(game.Workspace.__SETTINGS.__INTERACT:GetChildren()) do
+        if v.Name == "Practice" and not table.find(practiceArea,v.Area.Value.." Boost: "..v.Boost.Value) then
+            table.insert(practiceArea,v.Area.Value.." Boost: "..v.Boost.Value)
+        end
+    end 
+
+    for i, v in pairs(game.Workspace.__SETTINGS.__INTERACT:GetChildren()) do
+        if v.Name == "EGG" and not table.find(egg,v.Tier.Value) then 
+            table.insert(egg,v.Tier.Value)
+        end
+    end
+
+    local library = loadstring(game:HttpGet("https://pastebin.com/raw/vB8nLMCk", true))()
+    local b = library:CreateWindow("Farming")
+    local c = library:CreateWindow("Heroes")
+    local d = library:CreateWindow("Shop")
+    local e = library:CreateWindow("Teleport")
+    local f = library:CreateWindow("Misc")
+
+    b:Toggle("Auto Tap", {flag = "a"}, function(v)
+        _G.Settings.autoTap = v
+
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoTap then break end
+                game:GetService("ReplicatedStorage").Remotes.TappingEvent:FireServer()
+            end
+        end)
+    end)
+
+    b:Toggle("Auto Rebirth", {flag = "b"}, function(v)
+        _G.Settings.autoRebirth = v
+
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoRebirth then break end
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Rebirths",selectedNum)
+            end
+        end)
+    end)
+
+    b:Dropdown("Select Rebirth Amount", {flag = "c", list = reb}, function(value) 
+        for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Ui.CenterFrame.Rebirths.Frame:GetChildren()) do
+            if v:IsA("ImageLabel") and v.Price.Text == tostring(value) then
+                selectedNum = tonumber(v.Name)
+            end
+        end
+    end)
+
+    b:Toggle("Auto Practice", {flag = "d"}, function(v)
+        _G.Settings.autoPractice = v
+        
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoPractice then break end
+                for i, v in pairs(game.Workspace.__SETTINGS.__INTERACT:GetChildren()) do
+                    if v.Name == "Practice" and v.Boost.Value == tonumber(selectedArea) then
+                        plr.CFrame = v.CFrame * CFrame.new(0,0,5)
+                        game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Practice",v)
+                    end
+                end
+            end
+        end)
+    end)
+
+    b:Dropdown("Select Practice Area", {flag = "e", list = practiceArea}, function(v) 
+        selectedArea = string.match(v,"%d+")
+    end)
+
+    c:Toggle("Open Egg", {flag = "f"}, function(v)
+        _G.Settings.autoEgg = v
+
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoEgg then break end
+                plr.CFrame = selectedEgg.CFrame * CFrame.new(0,0,5)
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("EGG",selectedEgg,_G.Settings.tripleEgg,{})
+            end
+        end)
+    end)
+
+	c:Toggle("Triple Egg",{flag = "z"}, function(v)
+		if c.flags.z then
+			_G.Settings.tripleEgg = "3"
+		else
+			_G.Settings.tripleEgg = "1"
+		end
+	end)
+
+    c:Dropdown("Select Egg", {flag = "g", list = egg}, function(value) 
+        for i, v in pairs(game.Workspace.__SETTINGS.__INTERACT:GetChildren()) do
+            if v.Name == "EGG" and v.Tier.Value == value then 
+                selectedEgg = v
+            end
+        end 
+    end)
+    
+    c:Toggle("Auto Max Elite", {flag = "asd"}, function(v)
+        _G.Settings.autoMaxElite = v
+
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoMaxElite then break end
+                game:GetService("ReplicatedStorage").Remotes.NPCSystem:InvokeServer(true,"MAXELITE")
+            end
+        end)
+    end)
+
+    d:Toggle("Buy Upgrade", {flag = "h"}, function(v)
+        _G.Settings.autoUpgrade = v
+
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoUpgrade then break end
+                for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Ui.CenterFrame.Shop.Upgrades:GetChildren()) do
+                    if v:IsA("ImageLabel") then
+                        game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Upgrade",tonumber(v.Name))
+                    end
+                end
+                
+            end
+        end)
+    end)
+
+    d:Toggle("Buy Rank", {flag = "i"}, function(v)
+        _G.Settings.autoRank = v
+
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoRank then break end
+                for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Ui.CenterFrame.Shop.Ranks:GetChildren()) do
+                    if v:IsA("ImageLabel") then
+                        game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Ranks",tonumber(v.Name))
+                    end
+                end
+                
+            end
+        end)
+    end)
+
+    d:Toggle("Buy Aura", {flag = "j"}, function(v)
+        _G.Settings.autoAura = v
+
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoAura then break end
+                for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Ui.CenterFrame.Auras.Frame:GetChildren()) do
+                    if v:IsA("ImageLabel") then
+                        game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Auras",tonumber(v.Name))
+                    end
+                end
+                
+            end
+        end)
+    end)
+
+    d:Toggle("Buy World", {flag = "asd"}, function(value)
+        _G.Settings.autoWorld = value
+
+        task.spawn(function()
+            while task.wait() do
+                if not _G.Settings.autoWorld then break end
+                for i, v in pairs(game:GetService("Workspace")["__SETTINGS"]["__AREAS"]:GetChildren()) do
+                    game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Areas",v.Name)
+                end
+            end
+        end)
+    end)
+
+    for i, v in pairs(game:GetService("Workspace")["__SETTINGS"]["__AREAS"]:GetChildren()) do
+        e:Button(v.Name, function()
+            plr.CFrame = v.CFrame
+        end)
+    end
+
+    f:Button("New World",function()
+        for i, v in pairs(game.Workspace.__Map:GetChildren()) do
+            if v:FindFirstChild("TouchInterest") then
+                firetouchinterest(v,plr,0)
+            end
+        end
+    end)
+        
+    f:Button("Redeem Codes", function()
+        for i, v in pairs(codes) do
+            game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Codes",v)
+        end
+    end)
+
+    warn("Script loaded in",string.format("%.0f",tick()-tickk),"seconds")
+elseif game.PlaceId == 8649665676 then
+        _G.selectedMob = "Krunks"
+        _G.mobFarm = false
+    _G.selectedMob = "Krunks"
+
+    local mob = {}
+    local farmPos = "Behind"
+
+    for i, v in pairs(game.Workspace.NPCS:GetChildren()) do
+        if not table.find(mob,v.Name) then
+            table.insert(mob,v.Name)
+        end
+    end
+
+    function getNear()
+        local near
+        local nearr = math.huge
+        local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+        for i, v in pairs(game:GetService("Workspace").NPCS:GetChildren()) do
+            if v.Name == _G.selectedMob and (plr.Position - v.HumanoidRootPart.Position).Magnitude < nearr then
+                near = v.HumanoidRootPart
+                nearr = (plr.Position - v.HumanoidRootPart.Position).Magnitude
+            end
+        end
+
+        return near
+    end 
+
+    function teleport(enemy)
+        local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+        if farmPos == "Under" then
+            plr.CFrame = enemy.CFrame * CFrame.new(0,-10,0)
+        elseif farmPos == "Behind" then
+            plr.CFrame = enemy.CFrame * CFrame.new(0,0,5) 
+        end
+    end
+
+    function noclip()
+        for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+            if v:IsA("BasePart") and v.CanCollide == true then
+                v.CanCollide = false
+            end
+        end
+    end
+
+    local library = loadstring(game:HttpGet("https://pastebin.com/raw/vB8nLMCk", true))()
+    local w = library:CreateWindow("Farming")
+
+    w:Toggle("Enabled", {flag = "a"}, function(value)
+        _G.mobFarm = value
+        
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-393.16705322266, 5.9964461326599, -405.14428710938)
+        game.Workspace.Gravity = 198.2
+    end)
+
+    w:Dropdown("Dropdown", { flag = "dw", list = mob}, function(v)
+        _G.selectedMob = v
+    end)
+
+    w:Dropdown("Farm Position", {flag = "a", list = {"Behind","Under"}}, function(v)
+        farmPos = v
+    end)
+
+    if _G.lol then _G.lol:Disconnect() end
+    _G.lol = game:GetService('RunService').Stepped:Connect(function()
+        if _G.mobFarm then
+            noclip()
+            pcall(function()
+                game.Workspace.Gravity = 0
+                teleport(getNear())
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Tapping",getNear())
+            end)
+        end
+    end)
+elseif game.PlaceId == 8592863835 then
+        repeat wait() until game:IsLoaded()
+
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+        game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+    end)
+
+    pcall(function()
+        game.Workspace._Effects:Destroy()
+    end)    
+
+    local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
+    local egg = {}
+    local area = {}
+
+    for i, v in pairs(game:GetService("Workspace")["_Eggs"]:GetChildren()) do
+        table.insert(egg,v.Name)
+    end
+
+    for i, v in pairs(game:GetService("Workspace")["_SingleCoinSpawns"]:GetChildren()) do
+        table.insert(area,v.Name)
+    end
+
+    table.sort(area, function(a,b) return tonumber(a) > tonumber(b) end)
+
+    local selectedArea = area[1]
+
+    function evolve(lulw)
+        local pet = {}
+        for i, v in pairs(game:GetService("ReplicatedStorage").ReplicatedData[game.Players.LocalPlayer.Name].Pets:GetChildren()) do
+            if not table.find(pet,v.Type.Value) then
+                table.insert(pet,v.Type.Value)
+            end
+        end
+
+        if #pet >= 1 then
+            local arr = {}
+            local asd = math.random(1,#pet)
+        
+            for i, v in pairs(game:GetService("ReplicatedStorage").ReplicatedData[game.Players.LocalPlayer.Name].Pets:GetChildren()) do
+                if string.match(v.Type.Value,pet[asd]) and string.match(tostring(v.Evolution.Value),lulw) then
+                    table.insert(arr,tonumber(v.Name))
+                end
+            end
+            
+            if #arr >= 4 then
+                local args = {}
+                for i = 1, 4 do
+                    args[#args+1] = arr[#args+1]
+                end
+                game:GetService("ReplicatedStorage").Events.PetEvents.Evolve:FireServer(args)
+            end
+        end
+    end
+
+    local sell = {}
+    for i, v in pairs(game:GetService("Workspace").Rings:GetChildren()) do
+        if string.match(v.Name,"%d+") then
+            table.insert(sell,v.Name)
+            table.sort(sell, function(a,b) return tonumber(string.match(a,"%d+")) > tonumber(string.match(b,"%d+")) end)
+        end
+    end
+    
+    local sellArea = sell[1]
+
+    function getPets()
+        local pet = {}
+        for i, v in pairs(game:GetService("Workspace")["_PlayerPets"][game.Players.LocalPlayer.Name]:GetChildren()) do
+            if v:FindFirstChild("Torso") then
+                table.insert(pet,v.Name)
+            end
+        end
+        return pet
+    end
+
+    function getCoins()
+        local toFarm = {}
+        for i, v in pairs(game.Workspace.CollectibleCoins:GetChildren()) do
+            for i2, v2 in pairs(v:GetChildren()) do
+                for i3, v3 in pairs(v2:GetChildren()) do
+                    table.insert(toFarm,v3)
+                end
+            end
+        end
+        return toFarm
+    end
+
+    local library = loadstring(game:HttpGetAsync("https://pastebin.com/raw/znibQh36"))()
+    local Window = library:CreateWindow("Magnet Simulator 2")
+    local Farm_Folder = Window:AddFolder("Farming")
+    local Pet_Folder = Window:AddFolder("Pet")
+    local Shop_Folder = Window:AddFolder("Shop")
+    local Misc_Folder = Window:AddFolder("Misc")
+
+    Farm_Folder:AddToggle({
+        text = "Auto Coin Farm", 
+        callback = function(v) 
+            autofarm = v
+
+            task.spawn(function()
+                while task.wait(1) do
+                    if not autofarm then break end
+                    plr.CFrame = game:GetService("Workspace")["_SingleCoinSpawns"][selectedArea].CFrame * CFrame.new(0,2,0)
+                    for i, v in pairs(game.Workspace.Coins:GetChildren()) do
+                        game:GetService("ReplicatedStorage").Events.GameEvents.CollectCoin:FireServer(v,false)
+                    end
+                end
+            end)
+        end
+    })
+
+    Farm_Folder:AddList({
+        text = "Coin Farm Mult", 
+        values = area, 
+        callback = function(value)
+            selectedArea = value 
+        end
+    })
+
+    Farm_Folder:AddToggle({
+        text = "Auto Sell", 
+        callback = function(v) 
+            autosell = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not autosell then break end
+                    local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
+                    local sell = game:GetService("Workspace").Rings[sellArea].Touch.TouchInterest
+                    firetouchinterest(plr,sell.Parent,0)
+                    firetouchinterest(plr,sell.Parent,1)
+                end
+            end)
+        end
+    })
+
+    Farm_Folder:AddToggle({
+        text = "Multi Attack Coins", 
+        callback = function(v) 
+            multitarget = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not multitarget then break end
+                    pcall(function()
+                        local pet = getPets()
+                        local coin = getCoins()
+                        for i = 1, #pet do  
+                            game:GetService("Workspace")["_PlayerPets"][game.Players.LocalPlayer.Name][pet[i]]:FindFirstChild("Torso").CFrame = coin[i]:FindFirstChild("Base").CFrame
+                            game:GetService("ReplicatedStorage").Events.PetEvents.Collect:InvokeServer(coin[i],tonumber(pet[i]),"AddPetToStack")
+                        end
+                    end)
+                end
+            end)
+        end
+    })
+
+    Farm_Folder:AddToggle({
+        text = "Auto Collect Power Ups", 
+        callback = function(v) 
+            collectPower = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not collectPower then break end
+                    for i, v in pairs(game:GetService("Workspace")["_PlayerPowerUps"][game.Players.LocalPlayer.Name]:GetChildren()) do
+                        for a, b in pairs(v:GetChildren()) do
+                            if b.Name == "TouchInterest" then
+                                firetouchinterest(plr,b.Parent,0) task.wait()
+                                firetouchinterest(plr,b.Parent,1)
+                            end
+                        end
+                    end
+                end 
+            end)
+        end
+    })
+
+    Pet_Folder:AddToggle({
+        text = "Auto Open Egg", 
+        callback = function(v) 
+            openEgg = v 
+
+            task.spawn(function()
+                while task.wait() do
+                    if not openEgg then break end
+                    game:GetService("ReplicatedStorage").Events.GameEvents.BuyEgg:FireServer(selectedEgg)
+                end
+            end)
+        end
+    })
+
+    Pet_Folder:AddList({
+        text = "Select Egg", 
+        values = egg, 
+        callback = function(value) 
+            selectedEgg = value
+        end
+    })
+
+    Pet_Folder:AddToggle({
+        text = "Auto Equip Best",
+        callback = function(v)
+            equipBest = v
+            
+            task.spawn(function()
+                while task.wait(20) do
+                    if not equipBest then break end
+                    game:GetService("ReplicatedStorage").Events.PetEvents.EquipBest:FireServer()
+                end
+            end)
+        end
+    })
+
+    Pet_Folder:AddToggle({
+        text = "Auto Evolve", 
+        callback = function(v) 
+            autoEvolve = v 
+
+            task.spawn(function()
+                while task.wait() do
+                    if not autoEvolve then break end
+                    pcall(function()
+                        evolve(0)
+                        evolve(1)
+                        evolve(2)
+                        evolve(3)
+                    end)
+                end
+            end)
+        end
+    })
+
+    Shop_Folder:AddToggle({
+        text = "Auto Buy Magnet", 
+        callback = function(v) 
+            buyMagnet = v 
+
+            task.spawn(function()
+                while task.wait(1) do
+                    if not buyMagnet then break end
+                    for i, v in pairs(game:GetService("Workspace").MagnetShop.Magnets:GetChildren()) do
+                        game:GetService("ReplicatedStorage").Events.GameEvents.BuyMagnet:FireServer(v.Name) wait(.5)
+                    end
+                end
+            end)
+        end
+    })
+
+    Shop_Folder:AddToggle({
+        text = "Auto Upgrade Magnet", 
+        callback = function(v) 
+            upgradeMagnet = v 
+
+            task.spawn(function()
+                while task.wait(1) do
+                    if not upgradeMagnet then break end
+                    for i, v in pairs(game:GetService("Players").LocalPlayer.StarterGear:GetChildren()) do
+                        currentMagnet = v.Name
+                    end
+                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Range")
+                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Power")
+                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Speed")
+                end
+            end)
+        end
+    })
+
+    Shop_Folder:AddToggle({
+        text = "Auto Upgrade Speed", 
+        callback = function(v) 
+            upgradeSpeed = v 
+
+            task.spawn(function()
+                while task.wait(1) do
+                    if not upgradeSpeed then break end
+                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeSpeed:FireServer()
+                end
+            end)
+        end
+    })
+
+    Shop_Folder:AddToggle({
+        text = "Auto Upgrade Storage", 
+        callback = function(v) 
+            upgrageStorage = v 
+            
+            task.spawn(function()
+                while task.wait(1) do
+                    if not upgrageStorage then break end
+                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeStorage:FireServer()
+                end
+            end)
+        end
+    })
+
+    Shop_Folder:AddToggle({
+        text = "Auto Buy World", 
+        callback = function(v) 
+            buyWorld = v 
+
+            task.spawn(function()
+                while task.wait(1) do
+                    if not buyWorld then break end
+                    for i, v in pairs(game:GetService("Workspace")["_Gates"]:GetChildren()) do
+                        game:GetService("ReplicatedStorage").Events.GameEvents.BuyZone:FireServer(v.Name) wait(.5)
+                    end
+                end
+            end)
+        end
+    })
+
+    Misc_Folder:AddToggle({
+        text = "Auto Claim Daily Reward", 
+        callback = function(v) 
+            claimReward = v 
+        
+            game:GetService("Players").LocalPlayer.InGroup.Value = true
+
+            task.spawn(function()
+                while task.wait(1) do
+                    if not claimReward then break end
+                    local plr = game.Players.LocalPlayer.Character.HumanoidRootPart    
+                    local part1 = game:GetService("Workspace")["_Dailys"].GroupDaily.Ring.Touch.TouchInterest
+                    local part2 = game:GetService("Workspace")["_Dailys"].Daily.Ring.Touch.TouchInterest
+                    firetouchinterest(plr,part1.Parent,0)
+                    firetouchinterest(plr,part1.Parent,1)task.wait(2)
+                    firetouchinterest(plr,part2.Parent,0)
+                    firetouchinterest(plr,part2.Parent,1)
+                end
+            end)
+        end
+    })
+
+    Misc_Folder:AddToggle({
+        text = "Auto Use Enchantments", 
+        callback = function(v) 
+            useEnchant = v 
+        
+            task.spawn(function()
+                while task.wait(2) do
+                    if not useEnchant then break end
+                    for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Game.OpenableUi.Enchantments.Main.Top.Main:GetChildren()) do
+                        if v:IsA("Frame") then
+                            game:GetService("ReplicatedStorage").Events.GameEvents.UseEnchantment:InvokeServer(tonumber(v.Name))
+                        end
+                    end
+                end
+            end)
+        end
+    })
+
+    Misc_Folder:AddButton({
+        text = "Unlock Gamepass",
+        callback = function()
+            for i, v in pairs(game:GetService("Players").LocalPlayer.Gamepasses:GetChildren()) do
+                v.Value = true
+            end 
+        end
+    })
+
+    Misc_Folder:AddButton({
+        text = "Disable Notifications",
+        callback = function()
+            pcall(function()
+                game.Players.LocalPlayer.PlayerGui.Eggs:Destroy()
+                game.Players.LocalPlayer.PlayerGui.Evolve:Destroy()
+                game:GetService("Players").LocalPlayer.PlayerGui.Game.MidNotifications.Visible = false
+                game:GetService("Players").LocalPlayer.PlayerGui.Game.Notifications.Visible = false
+            end)
+        end
+    })
+
+    Misc_Folder:AddBind({
+        text = "Toggle GUI", 
+        key = "LeftControl", 
+        callback = function() 
+            library:Close()
+        end
+    })
+
+
+    library:Init()
+elseif game.PlaceId == 7560156054 then
+        -- inf jump
+    local a = game:GetService("Players").LocalPlayer.PlayerScripts.Client.Main.doubleJumping
+    for i, v in pairs(getgc()) do
+        if typeof(v) == 'function' and getfenv(v).script == a then
+            for i2, v2 in pairs(getupvalues(v)) do
+                if type(v2) == 'number' then
+                    setupvalue(v,i2,9e9)
+                end
+            end
+        end
+    end
+
+    -- gamepass
+    local b = require(game:GetService("ReplicatedStorage").ShopModule)
+    local gpData = game:GetService("Players").LocalPlayer.Data.gamepasses
+    for i, v in pairs(b.Gamepasses) do
+        gpData.Value = gpData.Value..';'..v.Label..';'
+    end
+
+    -- boost
+    for i, v in pairs(game:GetService("Players").LocalPlayer.Boosts:GetChildren()) do
+        v:FindFirstChild("isActive").Value = true
+    end
+elseif game.PlaceId == 8540346411 then
+        repeat wait() until game:IsLoaded()
+
+    game:GetService("Players").LocalPlayer.Idled:Connect(function()
+        game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+    end)
+
+    local Player = game:GetService("Players").LocalPlayer
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local isTriple = "Single"
+
+    function GetNearestEgg()
+        local nearr = math.huge
+        local near
+        local plr = Player.Character.HumanoidRootPart
+
+        for i, v in pairs(game:GetService("Workspace").Scripts.Eggs:GetChildren()) do
+            if (plr.CFrame.p - v.Egg.Egg.CFrame.p).Magnitude < nearr then
+                near = v.Name
+                nearr = (plr.CFrame.p - v.Egg.Egg.CFrame.p).Magnitude
+            end
+        end
+        return near
+    end
+
+    local lib = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)()
+    local Wait = lib.subs.Wait
+
+    local w = lib:CreateWindow({
+        Name = "Rebirth Champions X",
+        Themeable = {
+        Info = "Script by Uzu#6389"
+        }
+    })
+
+    local GeneralTab = w:CreateTab({
+        Name = "General"
+    })
+
+    local FarmingSection = GeneralTab:CreateSection({
+        Name = "Farming"
+    })
+
+    local PetSection = GeneralTab:CreateSection({
+        Name = "Pets"
+    })
+
+    local ShopSection = GeneralTab:CreateSection({
+        Name = "Shop"
+    })
+
+    local TeleSection = GeneralTab:CreateSection({
+        Name = "Teleports",
+        Side = "Right"
+    })
+
+    local MiscSection = GeneralTab:CreateSection({
+        Name = "Misc",
+        Side = "Right"
+    })
+
+    FarmingSection:AddToggle({
+        Name = "Auto Click",
+        Callback = function(v)
+            _G.autoclick = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not _G.autoclick then break end
+                    ReplicatedStorage.Events.Click:FireServer()
+                end
+            end)
+        end
+    })
+
+    FarmingSection:AddButton({
+        Name = "Rebirth Gamepass",
+        Callback = function()
+            for i, v in pairs(Player.Passes:GetChildren()) do
+                v.Value = true
+            end
+        end
+    })
+
+    PetSection:AddToggle({
+        Name = "Open Nearest Egg",
+        Callback = function(v)
+            _G.autoegg = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not _G.autoegg then break end    
+                    local eggy = GetNearestEgg() 
+                    ReplicatedStorage.Functions.Unbox:InvokeServer(eggy,isTriple)
+                end
+            end)
+        end
+    })
+
+    PetSection:AddToggle({
+        Name = "Triple Egg",
+        Callback = function(a)
+            asd = a
+
+            if asd then
+                isTriple = "Triple"
+            else
+                isTriple = "Single"
+            end
+        end
+    })
+
+    PetSection:AddToggle({
+        Name = "Equip Best (10 sec)",
+        Callback = function(v)
+            _G.autobest = v
+
+            task.spawn(function()
+                while task.wait(10) do
+                    if not _G.autobest then break end
+                    firesignal(Player.PlayerGui.MainUI.PetsFrame.Additional.EquipBest.Click.MouseButton1Up)
+                end
+            end)
+        end
+    })
+
+    PetSection:AddToggle({
+        Name = "Craft All (3 sec)",
+        Callback = function(v)
+            _G.autocraft = v
+
+            task.spawn(function()
+                while task.wait(3) do
+                    if not _G.autocraft then break end
+                    firesignal(Player.PlayerGui.MainUI.PetsFrame.Additional.CraftAll.Click.MouseButton1Up)
+                end
+            end)
+        end
+    })
+
+    ShopSection:AddToggle({
+        Name = "Auto Upgrade",
+        Callback = function(v)
+            _G.autoupgrade = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not _G.autoupgrade then break end
+                    for i, v in pairs(require(ReplicatedStorage.Modules.UpgradesShop)) do
+                        ReplicatedStorage.Functions.Upgrade:InvokeServer(tostring(i))
+                    end
+                end
+            end)
+        end
+    })
+
+    ShopSection:AddToggle({
+        Name = "Auto Buy Potion",
+        Callback = function(v)
+            _G.autopotion = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not _G.autopotion then break end
+                    for i, v in pairs(require(ReplicatedStorage.Modules.Potions)) do
+                        ReplicatedStorage.Events.Potion:FireServer(tostring(i))
+                    end
+                end
+            end)
+        end
+    })
+
+    for i, v in pairs(game:GetService("Workspace").Scripts.TeleportTo:GetChildren()) do
+        TeleSection:AddButton({
+            Name = v.Name,
+            Callback = function()
+                Player.Character.HumanoidRootPart.CFrame = v.CFrame
+            end
+        })
+    end
+
+    MiscSection:AddButton({
+        Name = "Hide Errors",
+        Callback = function()
+            pcall(function()
+                Player.PlayerGui.MainUI.Error:Destroy()
+            end)
+        end
+    })
+elseif game.PlaceId == 8554378337 then
+        repeat wait() until game:IsLoaded()
+
+    game:GetService("Players").LocalPlayer.Idled:Connect(function()
+        game:GetService("VirtualUser"):CaptureController()
+        game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+    end)
+
+    local area = {}
+    local boss_area = {}
+
+    local autocollect = false
+    local selected_type = "Teleport"
+    local selected_mob_type = "Nearest"
+
+    for i, v in pairs(game:GetService("Workspace").Fight:GetChildren()) do
+        if string.find(v.Name,"FightArea") and not table.find(area,v.Name)then
+            table.insert(area,v.Name)
+        end
+    end
+
+    for i, v in pairs(game:GetService("Workspace").Fight:GetChildren()) do
+        if v:FindFirstChild("BossTeleports") and not table.find(boss_area,v.Name) then
+            table.insert(boss_area,v.Name)
+        end
+    end
+
+    for i, v in pairs(game:GetService("ReplicatedStorage").CommonLogic.Fight.Models:GetChildren()) do
+        if string.find(v.Name,"FightArea") then
+            table.insert(area,v.Name)
+        end
+    end
+
+    for i, v in pairs(game:GetService("ReplicatedStorage").CommonLogic.Fight.Models:GetChildren()) do
+        if v:FindFirstChild("BossTeleports") and not table.find(boss_area,v.Name) then
+            table.insert(boss_area,v.Name)
+        end
+    end
+
+    table.sort(area)
+    table.sort(boss_area)
+
+    local selected_area = area[1]
+    local selected_boss_area = boss_area[1]
+    local selected_gamble_area = area[1]
+
+    function getHighest()
+        local high = {}
+        for i, v in pairs(game:GetService("Workspace").Fight.Chests:GetChildren()) do
+            for x, y in pairs(game.Workspace.Fight[selected_area].Root:GetChildren()) do
+                if v.Name == y.Name then
+                    table.insert(high,v.ChestHp.Value)
+                    table.sort(high, function(a,b) return a > b end)            
+                end
+            end
+        end
+    
+        for a, b in pairs(game:GetService("Workspace").Fight.Chests:GetChildren()) do
+            for x, y in pairs(game.Workspace.Fight[selected_area].Root:GetChildren()) do
+                if b.Name == y.Name and high[1] == b.ChestHp.Value then
+                    return b.Name
+                end
+            end
+        end    
+    end
+    
+    function getMid()
+        local mid = {}
+        for i, v in pairs(game:GetService("Workspace").Fight.Chests:GetChildren()) do
+            for x, y in pairs(game.Workspace.Fight[selected_area].Root:GetChildren()) do
+                if v.Name == y.Name then
+                    table.insert(mid,v.ChestHp.Value)
+                    table.sort(mid, function(a,b) return a < b end)            
+                end
+            end
+        end
+    
+        for a, b in pairs(game:GetService("Workspace").Fight.Chests:GetChildren()) do
+            for x, y in pairs(game.Workspace.Fight[selected_area].Root:GetChildren()) do
+                if b.Name == y.Name and mid[tonumber(string.format("%.g",#mid/2))] == b.ChestHp.Value then
+                    return b.Name
+                end
+            end
+        end  
+    end
+    
+    function getLowest()
+        local low = {}
+        for i, v in pairs(game:GetService("Workspace").Fight.Chests:GetChildren()) do
+            for x, y in pairs(game.Workspace.Fight[selected_area].Root:GetChildren()) do
+                if v.Name == y.Name then
+                    table.insert(low,v.ChestHp.Value)
+                    table.sort(low, function(a,b) return a < b end)            
+                end
+            end
+        end
+    
+        for a, b in pairs(game:GetService("Workspace").Fight.Chests:GetChildren()) do
+            for x, y in pairs(game.Workspace.Fight[selected_area].Root:GetChildren()) do
+                if b.Name == y.Name and low[1] == b.ChestHp.Value then
+                    return b.Name
+                end
+            end
+        end  
+    end
+    
+    function getNear()
+        local nearr,near = math.huge
+        local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
+    
+        for i, v in pairs(game:GetService("Workspace").Fight.ClientChests:GetChildren()) do
+            if (plr.Position - v.Root.Position).Magnitude < nearr then
+                near = v
+                nearr = (plr.Position - v.Root.Position).Magnitude
+            end
+        end
+    
+        return near
+    end
+
+    function getNearBoss()
+        local nearr,near = math.huge
+        local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
+    
+        for i, v in pairs(game:GetService("Workspace").Fight.ClientChests:GetChildren()) do
+            if string.match(v.Name,"Boss") and (plr.Position - v.Root.Position).Magnitude < nearr then
+                near = v.Root
+                nearr = (plr.Position - v.Root.Position).Magnitude
+            end
+        end
+    
+        return near
+    end
+    
+    function getQiChest()
+        for i, v in pairs(game:GetService("Workspace").Fight.Chests:GetChildren()) do
+            for x, y in pairs(game.Workspace.Fight[selected_area].Root:GetChildren()) do
+                if v.Name == y.Name and string.find(v.Value,"ChestBaoXiang") then
+                    return v.Name
+                end
+            end
+        end
+    end
+
+    function doSomething(mob)
+        local char,plr = game.Players.LocalPlayer.Character
+        local plr = char.HumanoidRootPart
+
+        if selected_type == "Teleport" then
+            plr.CFrame = mob.CFrame * CFrame.new(0,0,5)
+        elseif selected_type == "Tween" then
+            local a = game:GetService("TweenService"):Create(plr, TweenInfo.new(.5, Enum.EasingStyle.Linear), {CFrame = mob.CFrame * CFrame.new(0,0,5)})
+            a:Play()
+        elseif selected_type == "Walk" then
+            char.Humanoid:MoveTo(mob.Position)
+        end
+    end
+
+    function teleport(part)
+        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+        hrp.CFrame = part.CFrame * CFrame.new(0,2,5)
+    end
+
+    _G.autofarm = false
+    _G.autogamble = false
+    _G.autoboss = false
+
+    game:GetService("RunService").Stepped:Connect(function()
+        if _G.autofarm and selected_type ~= "Walk" then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+        end
+    end)
+
+    local library = loadstring(game:HttpGetAsync("https://pastebin.com/raw/znibQh36"))()
+    local Window = library:CreateWindow("Weapon Fighting")
+    local Farming_Folder = Window:AddFolder("Farming")
+    local Boss_Folder = Window:AddFolder("Boss")
+    local Gamble_Folder = Window:AddFolder("Gamble")
+    local Misc_Folder = Window:AddFolder("Misc")
+
+    Farming_Folder:AddToggle({
+        text = "Chest Farm", 
+        state = _G.autofarm,
+        callback = function(v) 
+            _G.autofarm = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not _G.autofarm then break end
+                    pcall(function()
+                        local chest
+                        local chestLoc
+                        if selected_mob_type == "Nearest" then
+                            chest = getNear()
+                            chestLoc = chest.Root
+                        elseif selected_mob_type == "High Hp" then
+                            chest = getHighest()
+                            chestLoc = game:GetService("Workspace").Fight.ClientChests[tostring(chest)].Root
+                        elseif selected_mob_type == "Mid Hp" then
+                            chest = getMid()
+                            chestLoc = game:GetService("Workspace").Fight.ClientChests[tostring(chest)].Root
+                        elseif selected_mob_type == "Low Hp" then
+                            chest = getLowest()
+                            chestLoc = game:GetService("Workspace").Fight.ClientChests[tostring(chest)].Root
+                        elseif selected_mob_type == "Qi Chest" then
+                            chest = getQiChest()
+                            chestLoc = game:GetService("Workspace").Fight.ClientChests[tostring(chest)].Root
+                        end
+                        
+                        doSomething(chestLoc)
+
+                        repeat task.wait(.5)
+                            doSomething(chestLoc)
+                            fireclickdetector(chestLoc.ClickDetector,69)
+                        until not _G.autofarm or not game:GetService("Workspace").Fight.ClientChests[chest].Root 
+                    end)
+                end
+            end)
+        end
+    })
+
+    Farming_Folder:AddList({
+        text = "Farming Type", 
+        values = {"Teleport","Tween","Walk"}, 
+        callback = function(v) 
+            selected_type = v 
+        end
+    })
+
+    Farming_Folder:AddList({
+        text = "Chest Type", 
+        values = {"Nearest","High Hp","Mid Hp","Low Hp","Qi Chest"}, 
+        callback = function(v) 
+            selected_mob_type = v
+            print(selected_mob_type)
+        end
+    })
+
+    Farming_Folder:AddList({
+        text = "Select Area", 
+        values = area, 
+        callback = function(v) 
+            selected_area = v
+        end
+    })
+
+    Farming_Folder:AddToggle({
+        text = "Collect Rewards", 
+        state = autocollect,
+        callback = function(v) 
+            autocollect = v
+
+            local d = require(game:GetService("ReplicatedStorage").CommonConfig.CfgGlobal)
+            
+            if autocollect then
+                d.RewardCollectRadius = 9e99
+            else 
+                d.RewardCollectRadius = 12
+            end
+        end
+    })
+
+    Boss_Folder:AddToggle({
+        text = "Boss Farm", 
+        state = _G.autoboss,
+        callback = function(v) 
+            _G.autoboss = v
+
+            task.spawn(function()
+                while task.wait() do
+                    if not _G.autoboss then break end
+                    pcall(function()
+                        if open_chest then
+                            local area_number = string.match(selected_boss_area,"%d")
+                            game:GetService("ReplicatedStorage").CommonLibrary.Tool.RemoteManager.Funcs.DataPullFunc:InvokeServer("ArenaOpenChestChannel", area_number-1, "c1", false)
+                        end
+                        wait(1)
+                        game:GetService("ReplicatedStorage").CommonLibrary.Tool.RemoteManager.Funcs.DataPullFunc:InvokeServer("ArenaTeleportLeaveChannel", "Out")   
+                        wait(1)
+                        teleport(game:GetService("Workspace").Fight[tostring(selected_boss_area)].BossTeleports.Platform.Platform)
+                        wait(1)
+                        local room_num = tonumber(string.match(selected_boss_area,"%d"))
+                        game:GetService("ReplicatedStorage").CommonLibrary.Tool.RemoteManager.Events.BossRoomStartEvent:FireServer(room_num,"room1")                    
+                        game:GetService("ReplicatedStorage").CommonLibrary.Tool.RemoteManager.Events.BossRoomStartEvent:FireServer(room_num,"room2") 
+                        wait(2)                    
+                        local near = getNearBoss()
+                        teleport(near)
+                        wait(.7)
+                        fireclickdetector(near.ClickDetector,69)
+                        repeat task.wait(.5) 
+                            teleport(near)
+                            fireclickdetector(near.ClickDetector,69)
+                        until not near or not _G.autoboss
+                    end)
+                end
+            end)
+        end
+    })
+
+    Boss_Folder:AddList({
+        text = "Select Area", 
+        values = boss_area, 
+        callback = function(v) 
+            selected_boss_area = v
+        end
+    })
+
+    Boss_Folder:AddToggle({
+        text = "Open Boss Chest", 
+        state = open_chest,
+        callback = function(v) 
+            open_chest = v
+        end
+    })
+
+    Gamble_Folder:AddToggle({
+        text = "Auto Gamble", 
+        state = autogamble,
+        callback = function(v) 
+            autogamble = v
+    
+            task.spawn(function()
+                while task.wait() do
+                    if not autogamble then break end
+                    for i, v in pairs(game.Workspace.Fight[selected_gamble_area].Gamble:GetChildren()) do
+                        if v:IsA("Part") then
+                            teleport(v)
+                            game:GetService('VirtualInputManager'):SendKeyEvent(true, "E", false, game)
+                            game:GetService('VirtualInputManager'):SendKeyEvent(false, "E", false, game)
+                        end
+                    end
+                end
+            end) 
+        end
+    })
+
+    Gamble_Folder:AddList({
+        text = "Select Area", 
+        values = area,
+        callback = function(a) 
+            selected_gamble_area = a
+        end
+    })
+
+    Misc_Folder:AddButton({
+        text = "Auto Hide Claimed Spells",
+        callback = function()
+            local PlayerGui = game:GetService("Players").LocalPlayer.PlayerGui
+            PlayerGui.ChildAdded:Connect(function(asd)
+                if asd.Name == "ScreenRwdGui" then
+                    asd:Destroy()
+                    wait(2)
+                    PlayerGui.MainGui.ScreenGui.Enabled = true
+                end
+            end)
+        end
+    })
+
+    Misc_Folder:AddButton({
+        text = "Unlock Some Gamepass",
+        callback = function()
+            local a = require(game:GetService("ReplicatedStorage").CommonLogic.Model.GamePasses)
+            a.HasGamePass = function() return true end
+        
+            game:GetService("Players").LocalPlayer.PlayerGui.MainGui.ScreenGui.MainLeftBarView.FrameChild3.BgTeleport.ImgMask.Visible = false
+        end
+    })
+
+    Misc_Folder:AddButton({
+        text = "Invisible",
+        callback = function()
+            pcall(function()
+                for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                    if v:IsA("MeshPart") and v.Name ~= "Head" and v.Name ~= "LowerTorso" and v.Name ~= "UpperTorso" then
+                        v:Destroy()
+                    end
+                end
+                game.Players.LocalPlayer.Character.Humanoid.Animator:Destroy()
+                game.Players.LocalPlayer.Character.LowerTorso.Root:Destroy()
+                game.Players.LocalPlayer.Character.NameTag:Destroy() 
+            end)
+        end
+    })
+
+    Misc_Folder:AddButton({
+        text = "Reload Script",
+        callback = function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/Bd6R0GaC"))()
+        end
+    })
+
+    Misc_Folder:AddBind({
+        text = "Toggle GUI", 
+        key = "LeftControl", 
+        callback = function() 
+            library:Close()
+        end
+    })
+
+    library:Init()
+end
+
+local bb = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:Connect(function()
+	bb:CaptureController()
+	bb:ClickButton2(Vector2.new())
+end)
