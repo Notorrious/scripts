@@ -331,40 +331,454 @@ elseif game.PlaceId == 8649665676 then
         end
     end)
 elseif game.PlaceId == 8592863835 then
-        repeat wait() until game:IsLoaded()
+    repeat wait() until game:IsLoaded()
+    
+    _G.settingsTable = {
+        autosell = false,
+        autoegg = false,
+        autodaily = false,
+        autodailygroup = false,
+        autoupgrademagnet = false,
+        autoupgradespeed = false,
+        autobuymagnet = false,
+        autopowerups = false,
+        autoenchant = false,
+        pref,
+        walkSpeed1,
+        magnet,
 
-    game:GetService("Players").LocalPlayer.Idled:connect(function()
-        game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-    end)
-
+    }
+    getgenv().Key = "password123"
+    getgenv().anti_afk = true
+    local world;
+    local item;
+    local p1 = game.Players.LocalPlayer.Character.HumanoidRootPart
+    local sell = game:GetService("Workspace").Rings.Sellx25.Touch.TouchInterest
+    local autoattack = game:GetService("Players").LocalPlayer.Gamepasses["Pet Auto Attack"]
+    local Heaven = CFrame.new(2873, 4, 485.6)
+    local hel = CFrame.new(2607, 4, 477)
+    local Ice = CFrame.new(2275, 4, 468)
+    local Graveyard = CFrame.new(2010, 4, 462)
+    local Wild_West_World = CFrame.new(1708, 4, 462)
+    local Quarry_Mine = CFrame.new(887, 4, 421)
+    local Volcanic_Field = CFrame.new(611, 4, 418)
+    local Coral_Reef = CFrame.new(311, 4 , 418)
+    local The_Jungle = CFrame.new(11, 4, 418)
+    local The_Desert = CFrame.new(-288, 4, 418)
+    local Spawn = CFrame.new(-588, 4, 418)
+    local loc1 = CFrame.new(-797.541687, 1.93124998, 383.812073)
+    local loc2 = CFrame.new(-749.623535, 1.93124998, 351.450165)
+    local loc4 = CFrame.new(-681.882751, 1.93124998, 342.399292)
+    local playerHead = game.Players.LocalPlayer.Character.Head
+    local location1 = CFrame.new(813, 4, 485)
+    local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
+    getgenv().autoevolve = false;
     pcall(function()
         game.Workspace._Effects:Destroy()
-    end)    
+        game.Players.LocalPlayer.PlayerGui.Eggs:Destroy()
+        game.Players.LocalPlayer.PlayerGui.Evolve:Destroy()
+        game:GetService("Players").LocalPlayer.PlayerGui.Game.MidNotifications.Visible = false
+        game:GetService("Players").LocalPlayer.PlayerGui.Game.Notifications.Visible = false
+    end) 
 
-    local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
-    local egg = {}
-    local area = {}
+    local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
 
-    for i, v in pairs(game:GetService("Workspace")["_Eggs"]:GetChildren()) do
-        table.insert(egg,v.Name)
+    local w = library:CreateWindow("Notorious Hub") -- Creates the window
+
+    local d = w:CreateFolder("Farming")
+
+    local r = w:CreateFolder("Sections")
+
+    local b = w:CreateFolder("Eggs")
+
+    local c = w:CreateFolder("Gamepasses")
+
+    local v = w:CreateFolder("Auto Upgrade")
+
+    local q = w:CreateFolder("Teleporter")
+
+    local a = w:CreateFolder("Misc")
+
+    local s = w:CreateFolder("Settings")
+
+    local e = w:CreateFolder("Destroy")
+
+    e:DestroyGui()
+
+
+    local filename = "Magnet_Simulator_Settings.txt"
+
+
+    function savesettings()
+        print("-saving user setting...")
+        local json;
+        local HttpService = game:GetService("HttpService")
+        if (writefile) then
+            json = HttpService:JSONEncode(_G.settingsTable)
+            writefile(filename, json)
+        else
+            print("-Unable to save settings due to your executor...")
+        end
     end
-
-    for i, v in pairs(game:GetService("Workspace")["_SingleCoinSpawns"]:GetChildren()) do
-        table.insert(area,v.Name)
+    s:Button("Save Settings",function()
+        savesettings()
+    end)
+    function loadsettings()
+        print("-loading settings...")
+        local HttpService = game:GetService("HttpService")
+        if (readfile and isfile and isfile(filename))then
+            _G.settingsTable = HttpService:JSONDecode(readfile(filename))
+            print("-settings loaded")
+        end
     end
+    s:Button("Load Settings",function()
+        loadsettings()
+    end)
 
-    table.sort(area, function(a,b) return tonumber(a) > tonumber(b) end)
+    
+    d:Toggle("AutoSell",function(bool)
+        _G.settingsTable.autosell = bool
+        savesettings()
+        if bool then
+            doSell1()
+        end
+    end)
+    d:Toggle("Auto Collect Power Ups",function(bool)
+        _G.settingsTable.autopowerups = bool
+        savesettings()
+        if bool then
+            doCollectPowerUps()
+        end
+    end)
+    b:Toggle("Auto Evolve",function(bool)
+        getgenv().autoevolve = bool
+        savesettings()
+        if bool then
+            doevolve()
+        end
+    end)
+    d:Toggle("Auto Enchant",function(bool)
+        _G.settingsTable.autoenchant = bool
+        savesettings()
+        if bool then
+            doAutoEnchant()
+        end
+    end)
+    b:Toggle("AutoEgg",function(bool)
+        _G.settingsTable.autoegg = bool
+        savesettings()
+        if bool then
+            doEgg()
+        end
+    end) 
+    v:Toggle("Auto Magnet Buyerr",function(bool)
+        _G.settingsTable.autobuymagnet = bool
+        savesettings()
+         if bool then
+            doAutoBuyMagnet()
+        end
+    end)
+    v:Toggle("Auto Upgrade Magnet",function(bool)
+        _G.settingsTable.autoupgrademagnet = bool
+        savesettings()
+         if bool then
+            doUpgradeMagnet()
+        end
+    end)
+    v:Toggle("Auto Upgrade Storage",function(bool)
+        _G.settingsTable.autoupgradestorage = bool
+        savesettings()
+         if bool then
+            doUpgradeStorage()
+        end
+    end)
+    v:Toggle("Auto Upgrade Speed",function(bool)
+        _G.settingsTable.autoupgradespeed = bool
+        savesettings()
+         if bool then
+            doUpgradeSpeed()
+        end
+    end)
+    a:Toggle("AutoDaily",function(bool)
+        _G.settingsTable.autodaily = bool
+        savesettings()
+        if bool then
+            doDaily()
+        end
+    end) 
+    a:Box("Speed Hack(eazy)","number",function(bal) -- "number" or "string"
+        savesettings()
+        _G.settingsTable.walkSpeed1 = bal;
+        local walkSpeed = _G.settingsTable.walkSpeed1;
 
-    local selectedArea = area[1]
+        local gmt = getrawmetatable(game)
 
-    function evolve(lulw)
+        setreadonly(gmt, false)
+
+        local oldindex = gmt.__index
+
+        gmt.__index = newcclosure(function(self,b)
+
+        if b == "WalkSpeed" then
+
+        return 16
+
+        end
+
+        return oldindex(self,b)
+
+        end)
+
+
+
+        game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = walkSpeed
+    end)
+    a:Toggle("Anti Afk",function(bool)
+        getgenv().anti_afk = bool
+        if bool then
+            doNoAfkAnti()
+        end
+    end)
+
+    b:Dropdown("Choose an egg",{"Common Egg","Rookie Egg","Desert Egg","Jungle Egg","Aquatic Egg","Volcanic Egg","Crystal Egg","Wild West Egg","Graveyard Egg","Frost Egg","Hell Egg","Heaven Egg","Secret Egg"},true,function(val) --true/false, replaces the current title "Dropdown" with the option that t
+        savesettings()
+        _G.settingsTable.pref = val
+    end)
+
+    c:Button("Unlock Gamepasses",function()
+        for i, v in pairs(game:GetService("Players").LocalPlayer.Gamepasses:GetChildren()) do
+            v.Value = true
+        end
+    end)
+    q:Button("The Heaven World",function()
+        p1.CFrame = Heaven;
+    end)
+    q:Button("The Hell World",function()
+        p1.CFrame = hel;
+    end)
+    q:Button("The Ice World",function()
+        p1.CFrame = Ice;
+    end)
+    q:Button("The Graveyard World",function()
+        p1.CFrame = Graveyard;
+    end)
+    q:Button("Wild West World",function()
+        p1.CFrame = Wild_West_World;
+    end)
+    q:Button("Quarry Mine World",function()
+        p1.CFrame = Quarry_Mine;
+    end)
+    q:Button("Volcanic Field World",function()
+        p1.CFrame = Volcanic_Field;
+    end)
+    q:Button("Coral Reef World",function()
+        p1.CFrame = Coral_Reef;
+    end)
+    q:Button("The Jungle World",function()
+        p1.CFrame = The_Jungle;
+    end)
+    q:Button("The Desert World",function()
+        p1.CFrame = The_Desert;
+    end)
+    q:Button("The Spawn World",function()
+        p1.CFrame = Spawn;
+    end)
+    r:Button("Magnet Shop",function()
+        doMagnet1()
+    end)
+    r:Button("Upgrade Storage",function()
+        doUpgrade1()
+    end)
+    r:Button("Upgrade Speed",function()
+        doSpeed1()
+    end)
+    r:Button("Enchantments",function()
+        doEnchant1()
+    end)
+    
+
+
+
+    ------------------------------------------------------------------------Functions-------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+    function doNoAfkAnti()
+        spawn(function()
+            while getgenv().anti_afk == true do
+                wait(900)
+                local vu = game:GetService("VirtualUser")
+                game:GetService("Players").LocalPlayer.Idled:connect(function()
+                vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+                wait(1)
+                vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+                print("-anti-afk has done the job!")
+                end)
+            end
+        end)
+    end
+    function doSell1()
+        spawn(function()
+            while _G.settingsTable.autosell do
+                firetouchinterest(playerHead, sell.Parent, 0)
+                wait(0.1)
+                firetouchinterest(playerHead, sell.Parent, 1)
+            end
+        end)
+    end
+    function doEnchant1()
+        spawn(function()
+            for i,v in pairs(game:GetService("Workspace").Rings.Enchantments:GetDescendants()) do
+                if v.Name == "TouchInterest" then
+                    firetouchinterest(playerHead, v.Parent, 0)
+                    wait(0.1)
+                    firetouchinterest(playerHead, v.Parent, 1)
+                    wait()
+                end
+            end
+        end)
+    end
+    function doEgg()
+        spawn(function()
+            while _G.settingsTable.autoegg == true
+             do
+                wait(0.25)
+                local args = {
+                    [1] = _G.settingsTable.pref
+                }
+
+                game:GetService("ReplicatedStorage").Events.GameEvents.BuyEgg:FireServer(unpack(args))
+
+            end
+        end)
+    end  
+    function doUpgrade1()
+        spawn(function()
+            local storage = game:GetService("Workspace")["_UpgradeRings"].Storage.Touch.TouchInterest
+            firetouchinterest(playerHead, storage.Parent, 0)
+            wait(0.1)
+            firetouchinterest(playerHead, storage.Parent, 1)
+            wait()
+        end)
+    end
+    function doMagnet1()
+        spawn(function()
+            local magnetupgrade = game:GetService("Workspace")["_UpgradeRings"].Magnet.Touch.TouchInterest
+            firetouchinterest(playerHead, magnetupgrade.Parent, 0)
+            wait(0.1)
+            firetouchinterest(playerHead, magnetupgrade.Parent, 1)
+            wait()
+        end)
+    end
+    function doSpeed1()
+        spawn(function()
+            local speedupgrade = game:GetService("Workspace")["_UpgradeRings"].Speed.Touch.TouchInterest
+            firetouchinterest(playerHead, speedupgrade.Parent, 0)
+            wait(0.1)
+            firetouchinterest(playerHead, speedupgrade.Parent, 1)
+            wait()
+        end)
+    end 
+    function doDaily()
+        spawn(function()
+            game:GetService("Players").LocalPlayer.InGroup.Value = true
+            while getgenv().autodaily do
+                if not getgenv().autodaily then break end
+                local part1 = game:GetService("Workspace")["_Dailys"].GroupDaily.Ring.Touch.TouchInterest
+                local part2 = game:GetService("Workspace")["_Dailys"].Daily.Ring.Touch.TouchInterest
+                firetouchinterest(plr,part1.Parent,0)
+                firetouchinterest(plr,part1.Parent,1)
+                wait(2)
+                firetouchinterest(plr,part2.Parent,0)
+                firetouchinterest(plr,part2.Parent,1)
+            end
+        end)
+    end
+    function doUpgradeMagnet()
+        spawn(function()
+            while _G.settingsTable.autoupgrademagnet == true do
+                while wait(1) do
+                    if not _G.settingsTable.autoupgrademagnet then break end
+                    for i, v in pairs(game:GetService("Players").LocalPlayer.StarterGear:GetChildren()) do
+                            currentMagnet = v.Name
+                    end
+                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Range")
+                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Power")
+                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Speed")
+                end
+            end 
+        end)
+    end
+    function doUpgradeStorage()
+        spawn(function()
+            while _G.settingsTable.autoupgradestorage == true do
+                wait(1)
+                game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeStorage:FireServer()
+            end 
+        end)
+    end
+    function doUpgradeSpeed()
+        spawn(function()
+            while _G.settingsTable.autoupgrademagnetspeed == true do
+                wait(1)
+                game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeSpeed:FireServer()
+            end 
+        end)
+    end
+    function doAutoBuyMagnet()
+        spawn(function()
+            while _G.settingsTable.autobuymagnet == true do
+                while wait(1) do
+                    if not _G.settingsTable.autobuymagnet then break end
+                    for i, v in pairs(game:GetService("Workspace").MagnetShop.Magnets:GetChildren()) do
+                        game:GetService("ReplicatedStorage").Events.GameEvents.BuyMagnet:FireServer(v.Name) wait(.5)
+                    end
+                end
+            end
+        end)
+    end
+    function doCollectPowerUps()
+        spawn(function()
+            while _G.settingsTable.autopowerups == true do
+                while wait(0.5) do
+                    if not _G.settingsTable.autopowerups then break end
+                    for i, v in pairs(game:GetService("Workspace")["_PlayerPowerUps"][game.Players.LocalPlayer.Name]:GetChildren()) do
+                        for a, b in pairs(v:GetChildren()) do
+                            if b.Name == "TouchInterest" then
+                                firetouchinterest(plr,b.Parent,0) task.wait()
+                                firetouchinterest(plr,b.Parent,1)
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+    function doAutoEnchant()
+        spawn(function()
+            while _G.settingsTable.autoenchant == true do
+                while wait(2) do
+                    if not _G.settingsTable.autoenchant then break end
+                    for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Game.OpenableUi.Enchantments.Main.Top.Main:GetChildren()) do
+                        if v:IsA("Frame") then
+                            game:GetService("ReplicatedStorage").Events.GameEvents.UseEnchantment:InvokeServer(tonumber(v.Name))
+                        end
+                    end
+                end
+            end
+        end)
+    end
+    function doevolve(lulw)
         local pet = {}
         for i, v in pairs(game:GetService("ReplicatedStorage").ReplicatedData[game.Players.LocalPlayer.Name].Pets:GetChildren()) do
             if not table.find(pet,v.Type.Value) then
                 table.insert(pet,v.Type.Value)
             end
         end
-
+    
         if #pet >= 1 then
             local arr = {}
             local asd = math.random(1,#pet)
@@ -384,335 +798,47 @@ elseif game.PlaceId == 8592863835 then
             end
         end
     end
-
-    local sell = {}
-    for i, v in pairs(game:GetService("Workspace").Rings:GetChildren()) do
-        if string.match(v.Name,"%d+") then
-            table.insert(sell,v.Name)
-            table.sort(sell, function(a,b) return tonumber(string.match(a,"%d+")) > tonumber(string.match(b,"%d+")) end)
-        end
-    end
     
-    local sellArea = sell[1]
+    -- print("-----Settings are------")
+    -- for i, v in pairs(_G.settingsTable) do
+    --     print(i, v)
+    -- end
+    -- print("------END--------")
 
-    function getPets()
-        local pet = {}
-        for i, v in pairs(game:GetService("Workspace")["_PlayerPets"][game.Players.LocalPlayer.Name]:GetChildren()) do
-            if v:FindFirstChild("Torso") then
-                table.insert(pet,v.Name)
-            end
-        end
-        return pet
-    end
+    -- loadsettings()
+    -- if _G.settingsTable.autosell then
+    --     doSell1()
+    -- end
+    -- if _G.settingsTable.autoegg then
+    --     doEgg()
+    -- end
+    -- if _G.settingsTable.autodaily then
+    --     doDaily1()
+    -- end
+    -- if _G.settingsTable.autodailygroup then
+    --     doDailyGroup1()
+    -- end
+    -- print("-----Settings are------")
+    -- for i, v in pairs(_G.settingsTable) do
+    --     print(i, v)
+    -- end
+    -- print("------END--------")
 
-    function getCoins()
-        local toFarm = {}
-        for i, v in pairs(game.Workspace.CollectibleCoins:GetChildren()) do
-            for i2, v2 in pairs(v:GetChildren()) do
-                for i3, v3 in pairs(v2:GetChildren()) do
-                    table.insert(toFarm,v3)
-                end
-            end
-        end
-        return toFarm
-    end
+    s:Button("Clear Settings",function()
+        _G.settingsTable.autosell = false
+        _G.settingsTable.autoegg = false
+        _G.settingsTabel.pref = nil
+        _G.settingsTable.walkSpeed1 = nil
+        _G.settingsTable.autoupgradespeed = nil
+        _G.settingsTable.autoupgradestorage = nil
+        _G.settingsTable.autoupgrademagnetspeed = nil
+        _G.settingsTable.autoupgrademagnetpower = nil
+        _G.settingsTable.autoupgrademagnetrange = nil
+        _G.settingsTable.magnet = nil
+        _G.settingsTable.autobuymagnet = nil
 
-    local library = loadstring(game:HttpGetAsync("https://pastebin.com/raw/znibQh36"))()
-    local Window = library:CreateWindow("Magnet Simulator 2")
-    local Farm_Folder = Window:AddFolder("Farming")
-    local Pet_Folder = Window:AddFolder("Pet")
-    local Shop_Folder = Window:AddFolder("Shop")
-    local Misc_Folder = Window:AddFolder("Misc")
+    end)
 
-    Farm_Folder:AddToggle({
-        text = "Auto Coin Farm", 
-        callback = function(v) 
-            autofarm = v
-
-            task.spawn(function()
-                while task.wait(1) do
-                    if not autofarm then break end
-                    plr.CFrame = game:GetService("Workspace")["_SingleCoinSpawns"][selectedArea].CFrame * CFrame.new(0,2,0)
-                    for i, v in pairs(game.Workspace.Coins:GetChildren()) do
-                        game:GetService("ReplicatedStorage").Events.GameEvents.CollectCoin:FireServer(v,false)
-                    end
-                end
-            end)
-        end
-    })
-
-    Farm_Folder:AddList({
-        text = "Coin Farm Mult", 
-        values = area, 
-        callback = function(value)
-            selectedArea = value 
-        end
-    })
-
-    Farm_Folder:AddToggle({
-        text = "Auto Sell", 
-        callback = function(v) 
-            autosell = v
-
-            task.spawn(function()
-                while task.wait() do
-                    if not autosell then break end
-                    local plr = game.Players.LocalPlayer.Character.HumanoidRootPart
-                    local sell = game:GetService("Workspace").Rings[sellArea].Touch.TouchInterest
-                    firetouchinterest(plr,sell.Parent,0)
-                    firetouchinterest(plr,sell.Parent,1)
-                end
-            end)
-        end
-    })
-
-    Farm_Folder:AddToggle({
-        text = "Multi Attack Coins", 
-        callback = function(v) 
-            multitarget = v
-
-            task.spawn(function()
-                while task.wait() do
-                    if not multitarget then break end
-                    pcall(function()
-                        local pet = getPets()
-                        local coin = getCoins()
-                        for i = 1, #pet do  
-                            game:GetService("Workspace")["_PlayerPets"][game.Players.LocalPlayer.Name][pet[i]]:FindFirstChild("Torso").CFrame = coin[i]:FindFirstChild("Base").CFrame
-                            game:GetService("ReplicatedStorage").Events.PetEvents.Collect:InvokeServer(coin[i],tonumber(pet[i]),"AddPetToStack")
-                        end
-                    end)
-                end
-            end)
-        end
-    })
-
-    Farm_Folder:AddToggle({
-        text = "Auto Collect Power Ups", 
-        callback = function(v) 
-            collectPower = v
-
-            task.spawn(function()
-                while task.wait() do
-                    if not collectPower then break end
-                    for i, v in pairs(game:GetService("Workspace")["_PlayerPowerUps"][game.Players.LocalPlayer.Name]:GetChildren()) do
-                        for a, b in pairs(v:GetChildren()) do
-                            if b.Name == "TouchInterest" then
-                                firetouchinterest(plr,b.Parent,0) task.wait()
-                                firetouchinterest(plr,b.Parent,1)
-                            end
-                        end
-                    end
-                end 
-            end)
-        end
-    })
-
-    Pet_Folder:AddToggle({
-        text = "Auto Open Egg", 
-        callback = function(v) 
-            openEgg = v 
-
-            task.spawn(function()
-                while task.wait() do
-                    if not openEgg then break end
-                    game:GetService("ReplicatedStorage").Events.GameEvents.BuyEgg:FireServer(selectedEgg)
-                end
-            end)
-        end
-    })
-
-    Pet_Folder:AddList({
-        text = "Select Egg", 
-        values = egg, 
-        callback = function(value) 
-            selectedEgg = value
-        end
-    })
-
-    Pet_Folder:AddToggle({
-        text = "Auto Equip Best",
-        callback = function(v)
-            equipBest = v
-            
-            task.spawn(function()
-                while task.wait(20) do
-                    if not equipBest then break end
-                    game:GetService("ReplicatedStorage").Events.PetEvents.EquipBest:FireServer()
-                end
-            end)
-        end
-    })
-
-    Pet_Folder:AddToggle({
-        text = "Auto Evolve", 
-        callback = function(v) 
-            autoEvolve = v 
-
-            task.spawn(function()
-                while task.wait() do
-                    if not autoEvolve then break end
-                    pcall(function()
-                        evolve(0)
-                        evolve(1)
-                        evolve(2)
-                        evolve(3)
-                    end)
-                end
-            end)
-        end
-    })
-
-    Shop_Folder:AddToggle({
-        text = "Auto Buy Magnet", 
-        callback = function(v) 
-            buyMagnet = v 
-
-            task.spawn(function()
-                while task.wait(1) do
-                    if not buyMagnet then break end
-                    for i, v in pairs(game:GetService("Workspace").MagnetShop.Magnets:GetChildren()) do
-                        game:GetService("ReplicatedStorage").Events.GameEvents.BuyMagnet:FireServer(v.Name) wait(.5)
-                    end
-                end
-            end)
-        end
-    })
-
-    Shop_Folder:AddToggle({
-        text = "Auto Upgrade Magnet", 
-        callback = function(v) 
-            upgradeMagnet = v 
-
-            task.spawn(function()
-                while task.wait(1) do
-                    if not upgradeMagnet then break end
-                    for i, v in pairs(game:GetService("Players").LocalPlayer.StarterGear:GetChildren()) do
-                        currentMagnet = v.Name
-                    end
-                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Range")
-                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Power")
-                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeMagnet:FireServer(currentMagnet,"Speed")
-                end
-            end)
-        end
-    })
-
-    Shop_Folder:AddToggle({
-        text = "Auto Upgrade Speed", 
-        callback = function(v) 
-            upgradeSpeed = v 
-
-            task.spawn(function()
-                while task.wait(1) do
-                    if not upgradeSpeed then break end
-                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeSpeed:FireServer()
-                end
-            end)
-        end
-    })
-
-    Shop_Folder:AddToggle({
-        text = "Auto Upgrade Storage", 
-        callback = function(v) 
-            upgrageStorage = v 
-            
-            task.spawn(function()
-                while task.wait(1) do
-                    if not upgrageStorage then break end
-                    game:GetService("ReplicatedStorage").Events.GameEvents.UpgradeStorage:FireServer()
-                end
-            end)
-        end
-    })
-
-    Shop_Folder:AddToggle({
-        text = "Auto Buy World", 
-        callback = function(v) 
-            buyWorld = v 
-
-            task.spawn(function()
-                while task.wait(1) do
-                    if not buyWorld then break end
-                    for i, v in pairs(game:GetService("Workspace")["_Gates"]:GetChildren()) do
-                        game:GetService("ReplicatedStorage").Events.GameEvents.BuyZone:FireServer(v.Name) wait(.5)
-                    end
-                end
-            end)
-        end
-    })
-
-    Misc_Folder:AddToggle({
-        text = "Auto Claim Daily Reward", 
-        callback = function(v) 
-            claimReward = v 
-        
-            game:GetService("Players").LocalPlayer.InGroup.Value = true
-
-            task.spawn(function()
-                while task.wait(1) do
-                    if not claimReward then break end
-                    local plr = game.Players.LocalPlayer.Character.HumanoidRootPart    
-                    local part1 = game:GetService("Workspace")["_Dailys"].GroupDaily.Ring.Touch.TouchInterest
-                    local part2 = game:GetService("Workspace")["_Dailys"].Daily.Ring.Touch.TouchInterest
-                    firetouchinterest(plr,part1.Parent,0)
-                    firetouchinterest(plr,part1.Parent,1)task.wait(2)
-                    firetouchinterest(plr,part2.Parent,0)
-                    firetouchinterest(plr,part2.Parent,1)
-                end
-            end)
-        end
-    })
-
-    Misc_Folder:AddToggle({
-        text = "Auto Use Enchantments", 
-        callback = function(v) 
-            useEnchant = v 
-        
-            task.spawn(function()
-                while task.wait(2) do
-                    if not useEnchant then break end
-                    for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Game.OpenableUi.Enchantments.Main.Top.Main:GetChildren()) do
-                        if v:IsA("Frame") then
-                            game:GetService("ReplicatedStorage").Events.GameEvents.UseEnchantment:InvokeServer(tonumber(v.Name))
-                        end
-                    end
-                end
-            end)
-        end
-    })
-
-    Misc_Folder:AddButton({
-        text = "Unlock Gamepass",
-        callback = function()
-            for i, v in pairs(game:GetService("Players").LocalPlayer.Gamepasses:GetChildren()) do
-                v.Value = true
-            end 
-        end
-    })
-
-    Misc_Folder:AddButton({
-        text = "Disable Notifications",
-        callback = function()
-            pcall(function()
-                game.Players.LocalPlayer.PlayerGui.Eggs:Destroy()
-                game.Players.LocalPlayer.PlayerGui.Evolve:Destroy()
-                game:GetService("Players").LocalPlayer.PlayerGui.Game.MidNotifications.Visible = false
-                game:GetService("Players").LocalPlayer.PlayerGui.Game.Notifications.Visible = false
-            end)
-        end
-    })
-
-    Misc_Folder:AddBind({
-        text = "Toggle GUI", 
-        key = "LeftControl", 
-        callback = function() 
-            library:Close()
-        end
-    })
-
-
-    library:Init()
 elseif game.PlaceId == 7560156054 then
         -- inf jump
     local a = game:GetService("Players").LocalPlayer.PlayerScripts.Client.Main.doubleJumping
