@@ -1,2 +1,2 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Notorrious/Magnet_Simulator_2/main/Magnet_Simulator_2",true))();
-loadstring(game:HttpGet("",true))();
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Notorrious/scripts/main/anime_punching_simulator",true))();
